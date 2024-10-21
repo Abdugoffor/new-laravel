@@ -1,9 +1,14 @@
 <?php
 
-use App\Controllers\TestController;
-use App\Controllers\UserController;
+use App\Controllers\AuthController;
+use App\Controllers\IndexController;
+use App\Controllers\PostController;
 use App\Routes\Route;
 
-Route::get('/', [UserController::class, 'index']);
-Route::get('/test', [TestController::class, 'test']);
-Route::post('/create', [TestController::class, 'create']);
+Route::get('/', [IndexController::class, 'index']);
+Route::get('/posts', [PostController::class, 'index']);
+Route::get('/login', [AuthController::class, 'loginPage']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'registerPage']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logaut', [AuthController::class, 'logaut']);

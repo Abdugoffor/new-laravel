@@ -14,7 +14,7 @@ if (!function_exists('dd')) {
     }
 }
 if (!function_exists('view')) {
-    function view($view, $title, $models = [])
+    function view(string $view,string $title, $models = [])
     {
         Views::make($view, $title, $models);
     }
@@ -37,5 +37,11 @@ if (!function_exists('auth')) {
     function auth()
     {
         return Auth::user();
+    }
+}
+if (!function_exists('redirect')) {
+    function redirect(string $url)
+    {
+        header("location: " . $url);
     }
 }

@@ -7,7 +7,7 @@ class Views
 
     public static function make($view, $title, array $models = [])
     {
-        extract($models);
+        extract($models); // alohida o'zgatuvchilarga ajratadi
         ob_start();
         include dirname(__DIR__) . '/views/' . $view . '.php';
         $content = ob_get_clean();

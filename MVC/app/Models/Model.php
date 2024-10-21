@@ -20,19 +20,23 @@ abstract class Model extends Database
     {
         try {
             $columns = implode(", ", array_keys($data));
-
             $placeholders = ":" . implode(", :", array_keys($data));
 
             $query = "INSERT INTO " . static::$table . " ({$columns}) VALUES ({$placeholders})";
             $stmt = self::connect()->prepare($query);
 
             foreach ($data as $key => $value) {
+                if ($key == "password") {
+
+                    $value = password_hash($value, PASSWORD_BCRYPT);
+                }
                 $stmt->bindValue(':' . $key, $value);
             }
 
             return $stmt->execute();
 
         } catch (PDOException $e) {
+
             echo "Ma'lumotlarni qo'shishda xatolik: " . $e->getMessage();
             return false;
         }
@@ -108,69 +112,45 @@ abstract class Model extends Database
             $stringValue = "";
             foreach ($data as $key => $value) {
                 if ($key == "password") {
-                    $value = password_hash($value, PASSWORD_BCRYPT);
+                    // $value = password_hash($value, PASSWORD_BCRYPT);
+                    continue;
                 }
 
                 $stringValue .= "{$key} = :{$key} AND ";
             }
-
             $cleanedString = rtrim($stringValue, "AND ");
-
+            // dd($cleanedString);
             $query = "SELECT * FROM " . static::$table . " WHERE {$cleanedString}";
+
             $stmt = $db->prepare($query);
 
             foreach ($data as $key => $value) {
                 if ($key == "password") {
-                    $value = password_hash($value, PASSWORD_BCRYPT);
+                    // $value = password_hash($value, PASSWORD_BCRYPT);
+                    continue;
                 }
-
                 $stmt->bindValue(':' . $key, $value);
             }
 
             $stmt->execute();
 
-            return $stmt->fetch(PDO::FETCH_OBJ);
+            $user = $stmt->fetch(PDO::FETCH_OBJ);
+            if ($user) {
+                if (isset($data['password']) && password_verify($data['password'], $user->password)) {
+                    return $user; 
+                } else {
+                    
+                    // echo "Parol noto'g'ri.";
+                    return "Parol noto'g'ri.";
+                }
+            } else {
+                return false;
+            }
 
         } catch (PDOException $e) {
             echo "Xatolik: " . $e->getMessage();
             return false;
         }
-    }
-
-    public static function uniqueColump($data)
-    {
-        try {
-            $db = self::connect();
-
-            $stringValue = "";
-            foreach ($data as $key => $value) {
-
-                $stringValue .= "{$key} = :{$key} AND ";
-            }
-
-            $cleanedString = rtrim($stringValue, "AND ");
-
-            $query = "SELECT * FROM " . static::$table . " WHERE {$cleanedString}";
-            $stmt = $db->prepare($query);
-
-            foreach ($data as $key => $value) {
-
-                $stmt->bindValue(':' . $key, $value);
-            }
-
-            $stmt->execute();
-
-            return $stmt->fetch(PDO::FETCH_OBJ);
-
-        } catch (PDOException $e) {
-            echo "Xatolik: " . $e->getMessage();
-            return false;
-        }
-    }
-    public static function query(string $sql)
-    {
-        $stmt = self::connect()->query($sql);
-        return $stmt->fetch(PDO::FETCH_OBJ);
     }
 
 }

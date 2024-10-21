@@ -25,10 +25,30 @@ class Auth
     public static function attach($data)
     {
         $user = User::attach($data);
-
         if ($user) {
+            unset($data['password']);
             $_SESSION['Auth'] = $user;
             return true;
+        } else {
+            return false;
+        }
+    }
+    public static function register(array $data)
+    {
+        $user = User::create($data);
+        if ($user) {
+
+            if (isset($data['name'])) {
+
+                unset($data['name']);
+            }
+
+            if (isset($data['c_password'])) {
+
+                unset($data['c_password']);
+            }
+            // dd($data);
+            self::attach($data);
         } else {
             return false;
         }

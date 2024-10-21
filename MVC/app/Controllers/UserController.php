@@ -10,5 +10,6 @@ class UserController
     {
         $models = UserResource::collection(User::all());
         dd($models);
+        
     }
 }
