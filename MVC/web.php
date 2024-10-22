@@ -12,3 +12,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'registerPage']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logaut', [AuthController::class, 'logaut']);
+
+// Post CRUD
+Route::post('/post-create', [PostController::class, 'create']);
+Route::post('/post-update', [PostController::class, 'update']);
+Route::post('/post-delete', [PostController::class, 'destroy']);

@@ -8,7 +8,7 @@ class Auth
 {
     public static function check()
     {
-        if (isset($_SESSION['Auth'])) {
+        if (isset($_SESSION['Auth']) && !empty($_SESSION['Auth'])) {
             return true;
         }
         return false;

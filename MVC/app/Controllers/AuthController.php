@@ -2,8 +2,8 @@
 namespace App\Controllers;
 
 use App\Helpers\Auth;
-use App\Requests\LoginRequest;
-use App\Requests\UserStoreRequest;
+use App\Requests\Auth\LoginRequest;
+use App\Requests\Auth\RegisterRequest;
 
 class AuthController
 {
@@ -32,7 +32,7 @@ class AuthController
     }
     public function register()
     {
-        $validate = new UserStoreRequest($_POST);
+        $validate = new RegisterRequest($_POST);
 
         if ($validate->validate()) {
             Auth::register($validate->getData());

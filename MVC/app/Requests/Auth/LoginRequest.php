@@ -1,5 +1,7 @@
 <?php
-namespace App\Requests;
+namespace App\Requests\Auth;
+
+use App\Requests\FormRequest;
 
 class LoginRequest extends FormRequest
 {

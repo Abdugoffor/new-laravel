@@ -1,7 +1,9 @@
 <?php
-namespace App\Requests;
+namespace App\Requests\Auth;
 
-class UserStoreRequest extends FormRequest
+use App\Requests\FormRequest;
+
+class RegisterRequest extends FormRequest
 {
     protected function rules(): array
     {
